@@ -53,6 +53,27 @@ app.get("/api/persons/:id", (req, res) => {
   }
 });
 
+// add a person
+const generateId = () => {
+  return Math.floor(Math.random() * 1000);
+};
+app.post("/api/persons", (req, res) => {
+  const body = req.body;
+
+  if (!body.name || !body.phone) {
+    return res.status(400).json({ error: "content missing" });
+  }
+
+  const person = {
+    name: body.name,
+    phone: body.phone,
+    id: generateId(),
+  };
+
+  persons = persons.concat(person);
+  res.json(person);
+});
+
 // delete a person
 app.delete("/api/persons/:id", (req, res) => {
   const id = Number(req.params.id);
