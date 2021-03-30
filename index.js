@@ -60,8 +60,13 @@ const generateId = () => {
 app.post("/api/persons", (req, res) => {
   const body = req.body;
 
+  // validation
   if (!body.name || !body.phone) {
     return res.status(400).json({ error: "content missing" });
+  }
+  const name_array = persons.map((person) => person.name);
+  if (name_array.includes(body.name)) {
+    return res.status(400).json({ error: "name must be unique" });
   }
 
   const person = {
