@@ -20,10 +20,10 @@ GET http://localhost:3001/api/contacts/607d9409cd03cc6abb3ef767
 
 ###
 
-PUT http://localhost:3001/api/contacts/607c6f0837a3b468b2ded719
+PUT http://localhost:3001/api/contacts/607f38115547f20015c85f24
 Content-Type: application/json
 
 {
-  "name": "Ian",
-  "phone": "999"
+  "name": "Peter",
+  "phone": "999-444-3333"
 }

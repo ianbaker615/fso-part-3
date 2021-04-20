@@ -5,6 +5,7 @@ const app = express();
 const morgan = require("morgan");
 const cors = require("cors");
 const Contact = require("./models/contact");
+const { update } = require("./models/contact");
 
 app.use(cors());
 app.use(express.static("build"));
@@ -92,13 +93,14 @@ app.get("/api/contacts/:id", (req, res) => {
 
 // update a contact
 app.put("/api/contacts/:id", (req, res, next) => {
-  const updatedContact = { name: req.body.name, phone: req.body.phone };
+  const updatedContact = {
+    phone: req.body.phone,
+  };
   // enable validation on mongoose update operations
-  const opts = { runValidators: true };
-  Contact.findByIdAndUpdate(req.params.id, updatedContact, opts)
-    .then((contact) => {
-      res.json(updatedContact);
-      res.status(200).end();
+  const opts = { runValidators: true, context: "query", new: true };
+  Contact.findOneAndUpdate({ _id: req.params.id }, updatedContact, opts)
+    .then((updatedContact) => {
+      res.json(updatedContact.toJSON());
     })
     .catch((error) => {
       next(error);
