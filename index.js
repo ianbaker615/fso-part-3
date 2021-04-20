@@ -30,7 +30,7 @@ app.use(
 //
 
 // add a contact
-app.post("/api/contacts", (req, res) => {
+app.post("/api/contacts", (req, res, next) => {
   const body = req.body;
   if (!body.name || !body.phone) {
     return res.status(400).json({ error: "content missing" });
@@ -39,9 +39,12 @@ app.post("/api/contacts", (req, res) => {
     name: body.name,
     phone: body.phone,
   });
-  contact.save().then((savedContact) => {
-    res.json(savedContact);
-  });
+  contact
+    .save()
+    .then((savedContact) => {
+      res.json(savedContact);
+    })
+    .catch((error) => next(error));
 });
 
 //
@@ -90,7 +93,9 @@ app.get("/api/contacts/:id", (req, res) => {
 // update a contact
 app.put("/api/contacts/:id", (req, res, next) => {
   const updatedContact = { name: req.body.name, phone: req.body.phone };
-  Contact.findByIdAndUpdate(req.params.id, updatedContact)
+  // enable validation on mongoose update operations
+  const opts = { runValidators: true };
+  Contact.findByIdAndUpdate(req.params.id, updatedContact, opts)
     .then((contact) => {
       res.json(updatedContact);
       res.status(200).end();
@@ -128,6 +133,8 @@ const errorHandler = (error, req, res, next) => {
 
   if (error.name === "CastError") {
     return res.status(404).send({ error: "incorrectly formatted id" });
+  } else if (error.name === "ValidationError") {
+    return res.status(400).json({ error: error.message });
   }
 
   next(error);

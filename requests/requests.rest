@@ -6,8 +6,8 @@ POST http://localhost:3001/api/contacts
 content-type: application/json
 
 {
-  "name": "Ian Baker",
-  "phone": "5554443333"
+  "name": "Ian",
+  "phone": "55"
 }
 
 ###
