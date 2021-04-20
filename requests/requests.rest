@@ -1,16 +1,29 @@
-DELETE http://localhost:3001/api/persons/1
-Content-Type: application/json
+DELETE http://localhost:3001/api/contacts/607daf99d73cd36deacaa3db
 
 ###
 
-POST http://localhost:3001/api/persons
+POST http://localhost:3001/api/contacts
 content-type: application/json
 
 {
   "name": "Ian Baker",
-  "phone": "6159574407"
+  "phone": "5554443333"
 }
 
 ###
 
-GET http://localhost:3001/api/persons
+GET http://localhost:3001/api/contacts
+
+###
+
+GET http://localhost:3001/api/contacts/607d9409cd03cc6abb3ef767
+
+###
+
+PUT http://localhost:3001/api/contacts/607c6f0837a3b468b2ded719
+Content-Type: application/json
+
+{
+  "name": "Ian",
+  "phone": "999"
+}
