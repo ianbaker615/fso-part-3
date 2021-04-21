@@ -1,16 +1,14 @@
 require("dotenv").config();
 const express = require("express");
-const mongoose = require("mongoose");
 const app = express();
 const morgan = require("morgan");
 const cors = require("cors");
 const Contact = require("./models/contact");
-const { update } = require("./models/contact");
 
 app.use(cors());
 app.use(express.static("build"));
 app.use(express.json());
-morgan.token("body", (req, res) => JSON.stringify(req.body));
+morgan.token("body", (req) => JSON.stringify(req.body));
 app.use(
   morgan((tokens, req, res) => {
     return [
@@ -75,7 +73,7 @@ app.get("/api/contacts", (req, res) => {
 });
 
 // get specific contact according to id
-app.get("/api/contacts/:id", (req, res) => {
+app.get("/api/contacts/:id", (req, res, next) => {
   Contact.findById(req.params.id)
     .then((contact) => {
       if (contact) {
@@ -114,7 +112,7 @@ app.put("/api/contacts/:id", (req, res, next) => {
 // delete a contact
 app.delete("/api/contacts/:id", (req, res, next) => {
   Contact.findByIdAndRemove(req.params.id)
-    .then((result) => {
+    .then(() => {
       res.status(204).end();
     })
     .catch((error) => next(error));
@@ -148,6 +146,7 @@ app.use(errorHandler);
 // SERVER SETUP
 //
 
+// eslint-disable-next-line no-undef
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
